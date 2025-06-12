@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Online Enigma</title>
+  <style>
+    body {
+      font-family: 'Courier New', monospace;
+      background: #121212;
+      color: #eee;
+      padding: 30px;
+    }
+    input, textarea, button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+      background: #1e1e1e;
+      border: 1px solid #444;
+      color: white;
+      border-radius: 5px;
+    }
+    label {
+      margin-top: 20px;
+      display: block;
+      font-weight: bold;
+    }
+    button {
+      background-color: #00bfff;
+      border: none;
+      font-weight: bold;
+      margin-top: 15px;
+      cursor: pointer;
+    }
+    .note {
+      font-size: 0.9em;
+      color: #aaa;
+    }
+  </style>
+</head>
+<body>
+  <h1>Online Enigma</h1>
+
+  <label>Message:</label>
+  <textarea id="message" rows="4" placeholder="Enter your message here..."></textarea>
+
+  <label>Rotor Start Positions (0–25):</label>
+  <input type="number" id="rotor1" value="0" min="0" max="25">
+  <input type="number" id="rotor2" value="0" min="0" max="25">
+  <input type="number" id="rotor3" value="0" min="0" max="25">
+
+  <label>Plugboard Pairs <span class="note">(Optional)</span></label>
+  <input type="text" id="plugboard" placeholder="You don't need this">
+
+  <button onclick="processMessage()">Encode / Decode</button>
+
+  <label>Output:</label>
+  <textarea id="output" rows="4" readonly></textarea>
+
+  <script>
+    const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+    function shiftChar(char, offset) {
+      const idx = alphabet.indexOf(char);
+      if (idx === -1) return char;
+      return alphabet[(idx + offset + 26) % 26];
+    }
+
+    function reflectChar(char) {
+      const idx = alphabet.indexOf(char);
+      if (idx === -1) return char;
+      return alphabet[25 - idx];
+    }
+
+    function buildPlugboardMap(pairs) {
+      const map = {};
+      const used = new Set();
+
+      pairs.forEach(pair => {
+        if (pair.length === 2) {
+          const a = pair[0];
+          const b = pair[1];
+          if (!used.has(a) && !used.has(b) && alphabet.includes(a) && alphabet.includes(b)) {
+            map[a] = b;
+            map[b] = a;
+            used.add(a);
+            used.add(b);
+          }
+        }
+      });
+
+      return map;
+    }
+
+    function processMessage() {
+      const raw = document.getElementById("message").value.toUpperCase();
+      const message = raw.replace(/[^A-Z]/g, ""); // remove all non-A-Z
+
+      const r1 = parseInt(document.getElementById("rotor1").value) % 26;
+      const r2 = parseInt(document.getElementById("rotor2").value) % 26;
+      const r3 = parseInt(document.getElementById("rotor3").value) % 26;
+
+      const plugPairs = document.getElementById("plugboard").value.toUpperCase().match(/\b[A-Z]{2}\b/g) || [];
+      const plugboard = buildPlugboardMap(plugPairs);
+
+      let rotor1 = r1;
+      let rotor2 = r2;
+      let rotor3 = r3;
+      let result = "";
+
+      for (let char of message) {
+        // Plugboard IN
+        char = plugboard[char] || char;
+
+        // Forward through rotors
+        char = shiftChar(char, rotor1);
+        char = shiftChar(char, rotor2);
+        char = shiftChar(char, rotor3);
+
+        // Reflector
+        char = reflectChar(char);
+
+        // Backward through rotors
+        char = shiftChar(char, -rotor3);
+        char = shiftChar(char, -rotor2);
+        char = shiftChar(char, -rotor1);
+
+        // Plugboard OUT
+        char = plugboard[char] || char;
+
+        result += char;
+
+        // Rotor stepping
+        rotor1 = (rotor1 + 1) % 26;
+        if (rotor1 === 0) rotor2 = (rotor2 + 1) % 26;
+        if (rotor2 === 0) rotor3 = (rotor3 + 1) % 26;
+      }
+
+      // Format in groups of 5
+      let grouped = "";
+      for (let i = 0; i < result.length; i++) {
+        grouped += result[i];
+        if ((i + 1) % 5 === 0 && i !== result.length - 1) grouped += " ";
+      }
+
+      document.getElementById("output").value = grouped;
+    }
+  </script>
+</body>
+</html>
