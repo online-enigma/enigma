@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Enigma Unscrambler</title>
+  <style>
+    body {
+      background: #121212;
+      color: #eee;
+      font-family: 'Poppins', sans-serif;
+      padding: 20px;
+    }
+    input, textarea, button {
+      width: 100%;
+      padding: 12px;
+      margin-top: 10px;
+      background: #1e1e1e;
+      border: 1px solid #444;
+      color: white;
+      border-radius: 5px;
+    }
+    button {
+      background-color: #00bfff;
+      border: none;
+      cursor: pointer;
+    }
+    label {
+      margin-top: 20px;
+      display: block;
+    }
+    pre {
+      background: #222;
+      padding: 15px;
+      border-radius: 5px;
+      white-space: pre-wrap;
+    }
+  </style>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <h1>Enigma Stream Decoder</h1>
+
+  <label for="dictionary">Load Dictionary (.txt):</label>
+  <input type="file" id="dictionary" accept=".txt" />
+
+  <label for="input">Encoded Text (e.g. groups of 5 letters):</label>
+  <textarea id="input" rows="8" placeholder="PASTEYOURTEXTLIKETHIS..."></textarea>
+
+  <button onclick="decode()">Decode</button>
+
+  <label for="output">Decoded Output:</label>
+  <pre id="output"></pre>
+
+  <script>
+    let wordSet = new Set();
+
+    // Load dictionary
+    document.getElementById('dictionary').addEventListener('change', function (e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function (evt) {
+        const words = evt.target.result.split(/\r?\n/).map(w => w.trim().toLowerCase());
+        wordSet = new Set(words);
+        alert("Dictionary loaded with " + wordSet.size + " words!");
+      };
+      reader.readAsText(file);
+    });
+
+    // Greedy word segmenter
+    function segment(text) {
+      text = text.toLowerCase();
+      const result = [];
+      let i = 0;
+
+      while (i < text.length) {
+        let found = false;
+        for (let j = text.length; j > i; j--) {
+          const word = text.substring(i, j);
+          if (wordSet.has(word)) {
+            result.push(word);
+            i = j;
+            found = true;
+            break;
+          }
+        }
+        if (!found) {
+          // If no word found, treat next letter as unknown
+          result.push(text[i]);
+          i++;
+        }
+      }
+
+      return result;
+    }
+
+    function decode() {
+      const raw = document.getElementById("input").value;
+      const joined = raw.replace(/[^A-Z]/gi, "").toLowerCase(); // remove spaces and non-letters
+      if (wordSet.size === 0) {
+        alert("Please load a dictionary file first.");
+        return;
+      }
+
+      const words = segment(joined);
+      const output = words.join(" ").replace(/\bi\b/g, "I");
+      document.getElementById("output").textContent = output;
+    }
+  </script>
+</body>
+</html>
