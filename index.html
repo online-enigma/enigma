@@ -59,18 +59,18 @@
   <textarea id="output" rows="4" readonly></textarea>
 
   <script>
-    const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ_";
 
     function shiftChar(char, offset) {
       const idx = alphabet.indexOf(char);
       if (idx === -1) return char;
-      return alphabet[(idx + offset + 26) % 26];
+      return alphabet[(idx + offset + alphabet.length) % alphabet.length];
     }
 
     function reflectChar(char) {
       const idx = alphabet.indexOf(char);
       if (idx === -1) return char;
-      return alphabet[25 - idx];
+      return alphabet[alphabet.length - 1 - idx];
     }
 
     function buildPlugboardMap(pairs) {
@@ -95,13 +95,13 @@
 
     function processMessage() {
       const raw = document.getElementById("message").value.toUpperCase();
-      const message = raw.replace(/[^A-Z]/g, ""); // remove all non-A-Z
+      const message = raw.replace(/[^A-Z_]/g, ""); // keep A-Z and underscores
 
-      const r1 = parseInt(document.getElementById("rotor1").value) % 26;
-      const r2 = parseInt(document.getElementById("rotor2").value) % 26;
-      const r3 = parseInt(document.getElementById("rotor3").value) % 26;
+      const r1 = parseInt(document.getElementById("rotor1").value) % alphabet.length;
+      const r2 = parseInt(document.getElementById("rotor2").value) % alphabet.length;
+      const r3 = parseInt(document.getElementById("rotor3").value) % alphabet.length;
 
-      const plugPairs = document.getElementById("plugboard").value.toUpperCase().match(/\b[A-Z]{2}\b/g) || [];
+      const plugPairs = document.getElementById("plugboard").value.toUpperCase().match(/\b[A-Z_]{2}\b/g) || [];
       const plugboard = buildPlugboardMap(plugPairs);
 
       let rotor1 = r1;
@@ -132,9 +132,9 @@
         result += char;
 
         // Rotor stepping
-        rotor1 = (rotor1 + 1) % 26;
-        if (rotor1 === 0) rotor2 = (rotor2 + 1) % 26;
-        if (rotor2 === 0) rotor3 = (rotor3 + 1) % 26;
+        rotor1 = (rotor1 + 1) % alphabet.length;
+        if (rotor1 === 0) rotor2 = (rotor2 + 1) % alphabet.length;
+        if (rotor2 === 0) rotor3 = (rotor3 + 1) % alphabet.length;
       }
 
       // Format in groups of 5
