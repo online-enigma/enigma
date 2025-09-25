@@ -14,8 +14,8 @@
       background: radial-gradient(circle at top left, #0a0a0f, #111122 60%);
       color: #eee;
       display: flex;
-      justify-content: center; /* horizontal center */
-      align-items: center;     /* vertical center */
+      justify-content: center;
+      align-items: center;
       overflow: hidden;
       position: relative;
     }
@@ -34,20 +34,10 @@
     }
 
     @keyframes floatCube {
-      0% {
-        transform: translateY(100vh) rotate(45deg);
-        opacity: 0;
-      }
-      10% {
-        opacity: 1;
-      }
-      90% {
-        opacity: 1;
-      }
-      100% {
-        transform: translateY(-20vh) rotate(225deg);
-        opacity: 0;
-      }
+      0% { transform: translateY(100vh) rotate(45deg); opacity: 0; }
+      10% { opacity: 1; }
+      90% { opacity: 1; }
+      100% { transform: translateY(-20vh) rotate(225deg); opacity: 0; }
     }
 
     .container {
@@ -62,6 +52,7 @@
       flex-direction: column;
       backdrop-filter: blur(6px);
       z-index: 10;
+      align-items: center; /* center contents horizontally */
     }
 
     h1 {
@@ -74,16 +65,30 @@
       font-size: 1.4rem;
     }
 
-    input, textarea {
-      width: 100%;
+    label {
+      margin-top: 15px;
+      font-weight: 600;
+      color: #bbb;
+      font-size: 0.9rem;
+      text-align: center;
+    }
+
+    input, textarea, button {
+      display: block;
+      margin: 10px auto 0 auto;
+      width: 90%;
+      max-width: 360px;
       padding: 10px;
-      margin-top: 10px;
-      background: #0e0e16;
-      border: 1px solid #222;
-      color: #fff;
       border-radius: 8px;
       font-size: 0.9rem;
       outline: none;
+      text-align: center;
+    }
+
+    input, textarea {
+      background: #0e0e16;
+      border: 1px solid #222;
+      color: #fff;
     }
 
     input:focus, textarea:focus {
@@ -91,26 +96,16 @@
       box-shadow: 0 0 12px #00aaff66;
     }
 
-    label {
-      margin-top: 15px;
-      display: block;
-      font-weight: 600;
-      color: #bbb;
-      font-size: 0.9rem;
-    }
-
     button {
-      width: 100%;
-      padding: 12px;
       margin-top: 18px;
       background: linear-gradient(135deg, #00aaff, #0066ff);
       border: none;
       font-weight: bold;
-      border-radius: 10px;
       cursor: pointer;
       color: #fff;
       letter-spacing: 1px;
       font-size: 1rem;
+      transition: transform 0.15s ease, box-shadow 0.2s ease;
     }
 
     button:hover {
@@ -213,7 +208,6 @@
 
     const messageBox = document.getElementById("message");
 
-    // 🔹 Replace spacebar press with underscore
     messageBox.addEventListener("keydown", function(e) {
       if (e.key === " ") {
         e.preventDefault();
@@ -224,7 +218,6 @@
       }
     });
 
-    // 🔹 Replace pasted/typed spaces with underscores
     messageBox.addEventListener("input", function() {
       if (this.value.includes(" ")) {
         const cursor = this.selectionStart;
