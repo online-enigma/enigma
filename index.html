@@ -52,7 +52,7 @@
       flex-direction: column;
       backdrop-filter: blur(6px);
       z-index: 10;
-      align-items: center; /* center contents horizontally */
+      align-items: center;
     }
 
     h1 {
@@ -225,6 +225,19 @@
         this.setSelectionRange(cursor, cursor);
       }
     });
+
+    // 🔹 Automatically fill inputs from URL parameters
+    const urlParams = new URLSearchParams(window.location.search);
+    const urlMessage = urlParams.get('message');
+    const urlRotor1 = urlParams.get('rotor1');
+    const urlRotor2 = urlParams.get('rotor2');
+    const urlRotor3 = urlParams.get('rotor3');
+
+    if(urlMessage !== null) document.getElementById('message').value = urlMessage;
+    if(urlRotor1 !== null) document.getElementById('rotor1').value = urlRotor1;
+    if(urlRotor2 !== null) document.getElementById('rotor2').value = urlRotor2;
+    if(urlRotor3 !== null) document.getElementById('rotor3').value = urlRotor3;
+
   </script>
 </body>
 </html>
