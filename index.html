@@ -7,30 +7,62 @@
   <style>
     body {
       font-family: 'Poppins', sans-serif;
-      background: radial-gradient(circle at top left, #0f0f0f, #121212 60%);
+      background: radial-gradient(circle at top left, #0a0a0f, #111122 60%);
       color: #eee;
       padding: 30px;
       min-height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
+      overflow: hidden;
+    }
+
+    /* Floating cubes background */
+    .cube {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background: rgba(0, 153, 255, 0.25);
+      border: 1px solid rgba(0, 180, 255, 0.5);
+      box-shadow: 0 0 12px rgba(0, 150, 255, 0.6);
+      animation: floatCube 12s linear infinite;
+      transform: rotate(45deg);
+    }
+
+    @keyframes floatCube {
+      0% {
+        transform: translateY(100vh) rotate(45deg);
+        opacity: 0;
+      }
+      10% {
+        opacity: 1;
+      }
+      90% {
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(-20vh) rotate(225deg);
+        opacity: 0;
+      }
     }
 
     .container {
       background: rgba(20, 20, 30, 0.95);
-      border: 1px solid #00bfff55;
+      border: 1px solid #009dff55;
       border-radius: 15px;
-      box-shadow: 0 0 25px #00bfff33, inset 0 0 20px #00bfff11;
+      box-shadow: 0 0 25px #009dff33, inset 0 0 20px #009dff11;
       padding: 30px;
       max-width: 600px;
       width: 100%;
       backdrop-filter: blur(6px);
+      position: relative;
+      z-index: 10;
     }
 
     h1 {
       text-align: center;
-      color: #00e6ff;
-      text-shadow: 0 0 12px #00e6ff88, 0 0 25px #0088ff55;
+      color: #00aaff;
+      text-shadow: 0 0 15px #00aaffaa, 0 0 30px #0077ff66;
       margin-bottom: 20px;
       font-weight: 600;
       letter-spacing: 1px;
@@ -50,8 +82,8 @@
     }
 
     input:focus, textarea:focus {
-      border-color: #00e6ff;
-      box-shadow: 0 0 10px #00e6ff55;
+      border-color: #00aaff;
+      box-shadow: 0 0 12px #00aaff66;
     }
 
     label {
@@ -66,7 +98,7 @@
       width: 100%;
       padding: 14px;
       margin-top: 20px;
-      background: linear-gradient(135deg, #00e6ff, #0066ff);
+      background: linear-gradient(135deg, #00aaff, #0066ff);
       border: none;
       font-weight: bold;
       border-radius: 10px;
@@ -79,7 +111,7 @@
 
     button:hover {
       transform: scale(1.03);
-      box-shadow: 0 0 20px #00e6ff88, 0 0 40px #0066ff44;
+      box-shadow: 0 0 20px #00aaffaa, 0 0 40px #0066ff77;
     }
 
     textarea[readonly] {
@@ -95,6 +127,13 @@
   </style>
 </head>
 <body>
+  <!-- Background cubes -->
+  <div class="cube" style="left:10%; animation-delay:0s;"></div>
+  <div class="cube" style="left:30%; animation-delay:3s;"></div>
+  <div class="cube" style="left:50%; animation-delay:6s;"></div>
+  <div class="cube" style="left:70%; animation-delay:9s;"></div>
+  <div class="cube" style="left:90%; animation-delay:1.5s;"></div>
+
   <div class="container">
     <h1>Secret Message Generator</h1>
 
