@@ -20,7 +20,6 @@
       position: relative;
     }
 
-    /* Floating cubes background */
     .cube {
       position: fixed;
       width: 20px;
@@ -126,7 +125,6 @@
   </style>
 </head>
 <body>
-  <!-- Background cubes -->
   <div class="cube" style="left:10%; animation-delay:0s;"></div>
   <div class="cube" style="left:30%; animation-delay:3s;"></div>
   <div class="cube" style="left:50%; animation-delay:6s;"></div>
@@ -184,60 +182,58 @@
           let c = shiftChar(upperCh, rotor1);
           c = shiftChar(c, rotor2);
           c = shiftChar(c, rotor3);
-
           c = reflectChar(c);
-
           c = shiftChar(c, -rotor3);
           c = shiftChar(c, -rotor2);
           c = shiftChar(c, -rotor1);
-
           encrypted += c;
 
           rotor1 = (rotor1 + 1) % 27;
           if (rotor1 === 0) {
             rotor2 = (rotor2 + 1) % 27;
-            if (rotor2 === 0) {
-              rotor3 = (rotor3 + 1) % 27;
-            }
+            if (rotor2 === 0) rotor3 = (rotor3 + 1) % 27;
           }
         }
       }
-
       document.getElementById("output").value = encrypted;
     }
 
     const messageBox = document.getElementById("message");
-
-    messageBox.addEventListener("keydown", function(e) {
+    messageBox.addEventListener("keydown", e => {
       if (e.key === " ") {
         e.preventDefault();
-        const start = this.selectionStart;
-        const end = this.selectionEnd;
-        this.value = this.value.substring(0, start) + "_" + this.value.substring(end);
-        this.setSelectionRange(start + 1, start + 1);
+        const start = messageBox.selectionStart;
+        const end = messageBox.selectionEnd;
+        messageBox.value = messageBox.value.substring(0, start) + "_" + messageBox.value.substring(end);
+        messageBox.setSelectionRange(start + 1, start + 1);
+      }
+    });
+    messageBox.addEventListener("input", () => {
+      if (messageBox.value.includes(" ")) {
+        const cursor = messageBox.selectionStart;
+        messageBox.value = messageBox.value.replace(/ /g, "_");
+        messageBox.setSelectionRange(cursor, cursor);
       }
     });
 
-    messageBox.addEventListener("input", function() {
-      if (this.value.includes(" ")) {
-        const cursor = this.selectionStart;
-        this.value = this.value.replace(/ /g, "_");
-        this.setSelectionRange(cursor, cursor);
-      }
-    });
-
-    // 🔹 Automatically fill inputs from URL parameters
+    // 🔹 URL parameter handling
     const urlParams = new URLSearchParams(window.location.search);
     const urlMessage = urlParams.get('message');
     const urlRotor1 = urlParams.get('rotor1');
     const urlRotor2 = urlParams.get('rotor2');
     const urlRotor3 = urlParams.get('rotor3');
+    const urlTrigger = urlParams.get('trigger'); // true/false
 
     if(urlMessage !== null) document.getElementById('message').value = urlMessage;
     if(urlRotor1 !== null) document.getElementById('rotor1').value = urlRotor1;
     if(urlRotor2 !== null) document.getElementById('rotor2').value = urlRotor2;
     if(urlRotor3 !== null) document.getElementById('rotor3').value = urlRotor3;
 
+    // 🔹 Auto-trigger encrypt/decrypt if trigger is true or missing
+    const shouldTrigger = urlTrigger === null || urlTrigger.toLowerCase() === 'true';
+    if(shouldTrigger) {
+      processMessage();
+    }
   </script>
 </body>
 </html>
