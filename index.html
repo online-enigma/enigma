@@ -7,53 +7,112 @@
   <style>
     body {
       font-family: 'Poppins', sans-serif;
-      background: #121212;
+      background: radial-gradient(circle at top left, #0f0f0f, #121212 60%);
       color: #eee;
       padding: 30px;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
-    input, textarea, button {
+
+    .container {
+      background: rgba(20, 20, 30, 0.95);
+      border: 1px solid #00bfff55;
+      border-radius: 15px;
+      box-shadow: 0 0 25px #00bfff33, inset 0 0 20px #00bfff11;
+      padding: 30px;
+      max-width: 600px;
       width: 100%;
-      padding: 10px;
-      margin-top: 10px;
-      background: #1e1e1e;
-      border: 1px solid #444;
-      color: white;
-      border-radius: 5px;
-      font-family: 'Poppins', sans-serif;
+      backdrop-filter: blur(6px);
     }
+
+    h1 {
+      text-align: center;
+      color: #00e6ff;
+      text-shadow: 0 0 12px #00e6ff88, 0 0 25px #0088ff55;
+      margin-bottom: 20px;
+      font-weight: 600;
+      letter-spacing: 1px;
+    }
+
+    input, textarea {
+      width: 100%;
+      padding: 12px;
+      margin-top: 12px;
+      background: #0e0e16;
+      border: 1px solid #222;
+      color: #fff;
+      border-radius: 8px;
+      font-family: 'Poppins', sans-serif;
+      transition: all 0.2s ease;
+      outline: none;
+    }
+
+    input:focus, textarea:focus {
+      border-color: #00e6ff;
+      box-shadow: 0 0 10px #00e6ff55;
+    }
+
     label {
       margin-top: 20px;
       display: block;
       font-weight: 600;
+      color: #bbb;
+      letter-spacing: 0.5px;
     }
+
     button {
-      background-color: #00bfff;
+      width: 100%;
+      padding: 14px;
+      margin-top: 20px;
+      background: linear-gradient(135deg, #00e6ff, #0066ff);
       border: none;
       font-weight: bold;
-      margin-top: 15px;
+      border-radius: 10px;
       cursor: pointer;
+      color: #fff;
+      letter-spacing: 1px;
+      font-size: 1rem;
+      transition: transform 0.15s ease, box-shadow 0.2s ease;
     }
+
+    button:hover {
+      transform: scale(1.03);
+      box-shadow: 0 0 20px #00e6ff88, 0 0 40px #0066ff44;
+    }
+
+    textarea[readonly] {
+      opacity: 0.9;
+    }
+
     .note {
       font-size: 0.9em;
       color: #aaa;
+      margin-top: 15px;
+      text-align: center;
     }
   </style>
 </head>
 <body>
-  <h1>Secret Message Generator</h1>
+  <div class="container">
+    <h1>Secret Message Generator</h1>
 
-  <label>Message:</label>
-  <textarea id="message" rows="4" placeholder="Enter your message here..."></textarea>
+    <label>Message:</label>
+    <textarea id="message" rows="4" placeholder="Enter your message here..."></textarea>
 
-  <label>Enter 3-step encryption code (max 9999 for each):</label>
-  <input type="number" id="rotor1" value="0" min="0" max="9999">
-  <input type="number" id="rotor2" value="0" min="0" max="9999">
-  <input type="number" id="rotor3" value="0" min="0" max="9999">
+    <label>Enter 3-step encryption code (max 9999 for each):</label>
+    <input type="number" id="rotor1" value="0" min="0" max="9999">
+    <input type="number" id="rotor2" value="0" min="0" max="9999">
+    <input type="number" id="rotor3" value="0" min="0" max="9999">
 
-  <button onclick="processMessage()">Encrypt / Decrypt</button>
+    <button onclick="processMessage()">Encrypt / Decrypt</button>
 
-  <label>Output:</label>
-  <textarea id="output" rows="4" readonly></textarea>
+    <label>Output:</label>
+    <textarea id="output" rows="4" readonly></textarea>
+
+    <p class="note">Spaces are automatically replaced with underscores.</p>
+  </div>
 
   <script>
     const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ_";
