@@ -77,29 +77,25 @@
       const r3Start = parseInt(document.getElementById("rotor3").value) % 27;
 
       let rotor1 = r1Start, rotor2 = r2Start, rotor3 = r3Start;
-
       let encrypted = "";
+
       for (let ch of input) {
         const upperCh = ch.toUpperCase();
         if (!alphabet.includes(upperCh)) {
-          encrypted += ch; // preserve punctuation, numbers, emoji, etc.
+          encrypted += ch;
         } else {
-          // Rotor forward
           let c = shiftChar(upperCh, rotor1);
           c = shiftChar(c, rotor2);
           c = shiftChar(c, rotor3);
 
-          // Reflect
           c = reflectChar(c);
 
-          // Rotor backward
           c = shiftChar(c, -rotor3);
           c = shiftChar(c, -rotor2);
           c = shiftChar(c, -rotor1);
 
           encrypted += c;
 
-          // Step rotors
           rotor1 = (rotor1 + 1) % 27;
           if (rotor1 === 0) {
             rotor2 = (rotor2 + 1) % 27;
@@ -112,6 +108,28 @@
 
       document.getElementById("output").value = encrypted;
     }
+
+    const messageBox = document.getElementById("message");
+
+    // 🔹 Replace spacebar press with underscore
+    messageBox.addEventListener("keydown", function(e) {
+      if (e.key === " ") {
+        e.preventDefault();
+        const start = this.selectionStart;
+        const end = this.selectionEnd;
+        this.value = this.value.substring(0, start) + "_" + this.value.substring(end);
+        this.setSelectionRange(start + 1, start + 1);
+      }
+    });
+
+    // 🔹 Replace pasted/typed spaces with underscores
+    messageBox.addEventListener("input", function() {
+      if (this.value.includes(" ")) {
+        const cursor = this.selectionStart;
+        this.value = this.value.replace(/ /g, "_");
+        this.setSelectionRange(cursor, cursor);
+      }
+    });
   </script>
 </body>
 </html>
