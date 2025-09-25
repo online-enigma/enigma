@@ -9,12 +9,12 @@
       font-family: 'Poppins', sans-serif;
       background: radial-gradient(circle at top left, #0a0a0f, #111122 60%);
       color: #eee;
-      padding: 30px;
+      margin: 0;
       min-height: 100vh;
       display: flex;
-      justify-content: center;
-      align-items: flex-start; /* top align instead of center */
-      overflow-x: hidden; /* allow vertical scroll but prevent sideways scroll */
+      justify-content: center;   /* center horizontally */
+      align-items: center;       /* center vertically */
+      overflow: hidden;          /* no scroll needed */
       position: relative;
     }
 
@@ -53,32 +53,34 @@
       border: 1px solid #009dff55;
       border-radius: 15px;
       box-shadow: 0 0 25px #009dff33, inset 0 0 20px #009dff11;
-      padding: 30px;
-      max-width: 600px;
+      padding: 25px;
+      max-width: 480px;
       width: 100%;
       backdrop-filter: blur(6px);
       position: relative;
-      z-index: 10; /* keep above cubes */
+      z-index: 10;
     }
 
     h1 {
       text-align: center;
       color: #00aaff;
       text-shadow: 0 0 15px #00aaffaa, 0 0 30px #0077ff66;
-      margin-bottom: 20px;
+      margin-bottom: 15px;
       font-weight: 600;
       letter-spacing: 1px;
+      font-size: 1.4rem;
     }
 
     input, textarea {
       width: 100%;
-      padding: 12px;
-      margin-top: 12px;
+      padding: 10px;
+      margin-top: 10px;
       background: #0e0e16;
       border: 1px solid #222;
       color: #fff;
       border-radius: 8px;
       font-family: 'Poppins', sans-serif;
+      font-size: 0.9rem;
       transition: all 0.2s ease;
       outline: none;
     }
@@ -89,17 +91,17 @@
     }
 
     label {
-      margin-top: 20px;
+      margin-top: 15px;
       display: block;
       font-weight: 600;
       color: #bbb;
-      letter-spacing: 0.5px;
+      font-size: 0.9rem;
     }
 
     button {
       width: 100%;
-      padding: 14px;
-      margin-top: 20px;
+      padding: 12px;
+      margin-top: 18px;
       background: linear-gradient(135deg, #00aaff, #0066ff);
       border: none;
       font-weight: bold;
@@ -121,9 +123,9 @@
     }
 
     .note {
-      font-size: 0.9em;
+      font-size: 0.8em;
       color: #aaa;
-      margin-top: 15px;
+      margin-top: 10px;
       text-align: center;
     }
   </style>
@@ -140,7 +142,7 @@
     <h1>Secret Message Generator</h1>
 
     <label>Message:</label>
-    <textarea id="message" rows="4" placeholder="Enter your message here..."></textarea>
+    <textarea id="message" rows="3" placeholder="Enter your message here..."></textarea>
 
     <label>Enter 3-step encryption code (max 9999 for each):</label>
     <input type="number" id="rotor1" value="0" min="0" max="9999">
@@ -150,7 +152,7 @@
     <button onclick="processMessage()">Encrypt / Decrypt</button>
 
     <label>Output:</label>
-    <textarea id="output" rows="4" readonly></textarea>
+    <textarea id="output" rows="3" readonly></textarea>
 
     <p class="note">Spaces are automatically replaced with underscores.</p>
   </div>
